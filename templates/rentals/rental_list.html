@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}All Rentals | Library Book Rental System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Book Rental Records</h2>
+    <a href="{% url 'rental_add' %}" class="btn btn-primary">+ Add Rental</a>
+</div>
+
+{% if rentals %}
+<div class="table-wrapper">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Borrower</th>
+                <th>Rental Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Fine</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+            <tr>
+                <td>{{ rental.book_title }}</td>
+                <td>{{ rental.author_name }}</td>
+                <td>{{ rental.borrower_name }}</td>
+                <td>{{ rental.rental_date }}</td>
+                <td>{{ rental.return_date }}</td>
+                <td><span class="status-label status-{{ rental.status|lower }}">{{ rental.status }}</span></td>
+                <td>₹{{ rental.fine_amount }}</td>
+                <td class="actions">
+                    <a href="{% url 'rental_detail' rental.pk %}" class="btn btn-sm btn-view">View</a>
+                    <a href="{% url 'rental_edit' rental.pk %}" class="btn btn-sm btn-edit">Edit</a>
+                    <a href="{% url 'rental_delete' rental.pk %}" class="btn btn-sm btn-delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No book rental records found.</p>
+    <a href="{% url 'rental_add' %}" class="btn btn-primary">Add the first rental</a>
+</div>
+{% endif %}
+{% endblock %}
